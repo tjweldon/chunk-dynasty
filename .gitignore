@@ -1,0 +1,37 @@
+#####
+# First, rules intended to apply in all subdirectories.
+# These contain no slash, or only a trailing slash.
+
+*.cover
+*.iml
+*.o
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.orig
+*.pyc
+*.pyd
+*.pyo
+*.rej
+*.swp
+*~
+*.gc??
+*.profclang?
+*.profraw
+*.dyn
+.gdb_history
+.purify
+__pycache__
+.hg/
+.svn/
+.idea/
+tags
+TAGS
+.vs/
+.vscode/
+gmon.out
+.coverage
+.mypy_cache/
+.pytest_cache/
