@@ -36,7 +36,3 @@ class TransactionTest(unittest.TestCase):
         signed_transaction = transaction.sign(signature)
 
         self.assertFalse(signed_transaction.verify())
-
-
-
-
