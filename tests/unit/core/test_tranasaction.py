@@ -11,7 +11,6 @@ class TransactionTest(unittest.TestCase):
 
     def test_get_signature(self):
         transaction = self.get_transaction()
-
         signature = get_transaction_signature(transaction, self.sender_key)
 
         self.assertIsInstance(signature, bytes)
