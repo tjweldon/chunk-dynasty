@@ -30,6 +30,13 @@ class TransactionTest(unittest.TestCase):
 
         self.assertTrue(signed_transaction.verify())
 
+    def test_invalid_signature(self):
+        transaction = self.get_transaction()
+        signature = b'some invalid signature'
+        signed_transaction = transaction.sign(signature)
+
+        self.assertFalse(signed_transaction.verify())
+
 
 
 
