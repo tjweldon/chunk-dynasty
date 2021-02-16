@@ -19,6 +19,9 @@ class Chunk:
         self._salt = salt
 
     def __str__(self) -> str:
+        return str(bytes(self))
+
+    def __bytes__(self) -> bytes:
         return self._parent_header + self._data + self._salt
 
     @property
@@ -27,7 +30,7 @@ class Chunk:
 
     @property
     def header(self) -> bytes:
-        return _header
+        return self._header
 
     @property
     def parent_header(self) -> bytes:
