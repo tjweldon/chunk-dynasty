@@ -1,5 +1,7 @@
 #!/usr/bin/env python
+from __future__ import annotations
 
+import json
 from typing import Callable
 from Cryptodome.Hash import SHA256
 
@@ -42,6 +44,21 @@ class Chunk:
 
     def verify(self):
         return hash_chunk(self) == self._header
+
+    def serialize(self) -> str:
+        chunk_dict = {
+            'data': self._data.decode(),
+            'parent_header': self._parent_header.decode(),
+            'header': self._header.decode(),
+            'salt': self._salt.decode(),
+        }
+
+        return json.dumps(chunk_dict)
+
+    @classmethod
+    def deserialize(cls, json_chunk: str) -> Chunk:
+        chunk_dict = json.loads(json_chunk)
+        return cls(**chunk_dict)
 
 
 def hash_chunk(chunk: Chunk) -> bytes:
