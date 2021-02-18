@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import annotations
 from typing import Callable
 from Cryptodome.Hash import SHA256
 
@@ -42,6 +42,13 @@ class Chunk:
 
     def verify(self):
         return hash_chunk(self) == self._header
+
+    def serialize(self) -> str:
+        pass
+
+    @classmethod
+    def deserialize(cls, json: str) -> Chunk:
+        pass
 
 
 def hash_chunk(chunk: Chunk) -> bytes:
