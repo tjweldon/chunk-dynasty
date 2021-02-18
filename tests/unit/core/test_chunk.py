@@ -67,16 +67,15 @@ class ChunkTest(unittest.TestCase):
     def test_deserialization_from_json(self):
         serialized_chunk = self.get_serialized_chunk()
 
-        error = None
+        chunk = None
+        error = ''
         try:
             chunk = Chunk.deserialize(serialized_chunk)
         except Exception as error:
             pass
 
-        self.assertIsNone(
-            error,
+        self.assertIsNotNone(
+            chunk,
             "An exception was thrown during deserialization. The message was {}"
                 .format(str(error))
         )
-
-
