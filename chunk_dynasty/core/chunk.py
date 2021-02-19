@@ -12,6 +12,12 @@ def get_salter(data: bytes, parent_header: bytes) -> Callable:
 
 
 class Chunk:
+
+    @classmethod
+    def deserialize(cls, json_chunk: str) -> Chunk:
+        chunk_dict = json.loads(json_chunk)
+        return cls(**chunk_dict)
+
     def __init__(
             self, data: bytes, parent_header: bytes, header: bytes, salt: bytes
     ) -> None:
@@ -54,11 +60,6 @@ class Chunk:
         }
 
         return json.dumps(chunk_dict)
-
-    @classmethod
-    def deserialize(cls, json_chunk: str) -> Chunk:
-        chunk_dict = json.loads(json_chunk)
-        return cls(**chunk_dict)
 
 
 def hash_chunk(chunk: Chunk) -> bytes:
