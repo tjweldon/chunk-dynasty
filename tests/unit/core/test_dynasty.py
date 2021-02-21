@@ -60,3 +60,13 @@ class DynastyTest(unittest.TestCase):
         actual_ultimate_successor = dynasty.get_chunk_list()[-1]
 
         self.assertEqual(expected_ultimate_successor, actual_ultimate_successor)
+
+    def test_intersection_exists(self):
+        chunk_list = ChunkFactory.get_successors(self.first_chunk, 8)
+        intersecting_chunk_list = chunk_list[5:-1] + ChunkFactory.get_successors(chunk_list[-1], 3)
+        dynasty = Dynasty(chunk_list)
+        intersecting_dynasty = Dynasty(intersecting_chunk_list)
+
+        intersection = dynasty.intersection(intersecting_dynasty)
+
+        self.assertListEqual(dynasty.get_chunk_list()[5:], intersection.get_chunk_list())

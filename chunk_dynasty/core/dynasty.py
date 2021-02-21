@@ -64,17 +64,72 @@ class Dynasty:
     def serialize(self) -> str:
         pass
 
-    def head_index(self, other: Dynasty) -> Optional[int]:
+    def intersection(self, other: Dynasty) -> Optional[Dynasty]:
         """
-        This function gives relative index of the the head of the other dynasty with respect
-        to the dynasty instance on which it is invoked.
+        This function returns the intersection of two dynasties if it exists.
+        if it doesn't exist it returns None
         :param other:
         :return:
         """
-        pass
+        if not other.validate():
+            raise ValueError("The dynasty passed was not valid")
+
+        other_header_list = [chunk.header for chunk in other.get_chunk_list()]
+        this_header_list = [chunk.header for chunk in self._chunks]
+
+        this_dynasty_is_older = other_header_list[0] in this_header_list[1:]
+        other_dynasty_older = this_header_list[0] in other_header_list[1:]
+        simultaneous_start = this_header_list[0] == other_header_list[0]
+
+        case = (this_dynasty_is_older, other_dynasty_older, simultaneous_start)
+        no_intersection = (False, False, False)
+
+        if case == no_intersection:
+            return None
+
+        if this_dynasty_is_older:
+            other_header_list = self._pad_other_list(other_header_list, this_header_list)
+            # EXAMPLE
+            # this_header_list = [h1, h2, h3, h4]
+            # other header_list = [b'', b'', b'', h4, h5, h6]
+
+        if other_dynasty_older:
+            other_header_list = self._truncate_other_list(other_header_list, this_header_list)
+            # EXAMPLE
+            # this_header_list = [h4, h5, h6, h7]
+            # other header_list = [h4, h5, h6]
+
+        intersection_indices = []
+        for index, header in enumerate(this_header_list):
+            if index not in range(0, len(other_header_list)):
+                break
+            if header == other_header_list[index]:
+                intersection_indices.append(index)
+
+        chunk_list = [self._chunks[i] for i in intersection_indices]
+
+        return Dynasty(chunk_list)
+
+    def _truncate_other_list(self, other_header_list, this_header_list):
+        # Here we truncate the beginning of the other header list
+        # to give it the same indexing as this_header_list
+        offset = other_header_list.index(this_header_list[0])
+        other_header_list = other_header_list[offset:]
+        return other_header_list
+
+    def _pad_other_list(self, other_header_list, this_header_list):
+        # Here we pad the beginning of the other header list with trivial
+        # hashes to give it the same indexing as this_header_list
+        offset = this_header_list.index(other_header_list[0])
+        other_header_list = [b''] * offset + other_header_list
+        return other_header_list
 
     def __eq__(self, other):
         pass
 
     def __len__(self) -> int:
         pass
+
+    def _truncate_to_match_start(self, other_header_list, this_header_list):
+        offset = other_header_list.index(this_header_list[0])
+        return other_header_list[offset:]
