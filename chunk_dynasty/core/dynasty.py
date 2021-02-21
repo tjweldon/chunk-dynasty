@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import json
 from typing import List, Optional
 
 from chunk_dynasty.core.chunk import Chunk
@@ -9,7 +11,10 @@ class Dynasty:
 
     @classmethod
     def deserialize(cls, dynasty_json: str) -> Dynasty:
-        pass
+        dynasty_primitive = json.loads(dynasty_json)
+        chunks = [Chunk(**chunk_dict) for chunk_dict in dynasty_primitive]
+        return cls(chunks)
+
 
     def __init__(self, chunks: Optional[List[Chunk]] = None):
         if chunks is None:
@@ -62,7 +67,8 @@ class Dynasty:
         return self
 
     def serialize(self) -> str:
-        pass
+        chunk_dict_list = [chunk.get_dict() for chunk in self._chunks]
+        return json.dumps(chunk_dict_list)
 
     def intersection(self, other: Dynasty) -> Optional[Dynasty]:
         """
@@ -125,7 +131,13 @@ class Dynasty:
         return other_header_list
 
     def __eq__(self, other):
-        pass
+        if type(other) != type(self):
+            return False
+
+        other_header_list = [chunk.header for chunk in other.get_chunk_list()]
+        this_header_list = [chunk.header for chunk in self._chunks]
+
+        return other_header_list == this_header_list
 
     def __len__(self) -> int:
         pass
