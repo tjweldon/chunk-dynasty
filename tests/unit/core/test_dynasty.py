@@ -34,14 +34,22 @@ class DynastyTest(unittest.TestCase):
     def test_get_tail(self):
         chunk_list = ChunkFactory.get_successors(self.first_chunk, 8)
         dynasty = Dynasty(chunk_list)
+        print(len(chunk_list))
 
         expected_tail_length = 2
         tail = dynasty.get_tail(expected_tail_length)
         expected_ultimate_successor = chunk_list[-1]
         actual_ultimate_successor = tail.get_chunk_list()[-1]
 
-        self.assertEqual(expected_ultimate_successor, actual_ultimate_successor)
+        self.assertEqual(expected_ultimate_successor.header, actual_ultimate_successor.header)
         self.assertEqual(expected_tail_length, len(tail.get_chunk_list()))
+
+    def test_invalid_tail_length(self):
+        length = 8
+        chunk_list = ChunkFactory.get_successors(self.first_chunk, length - 1)
+        dynasty = Dynasty(chunk_list)
+
+        self.assertRaises(ValueError, dynasty.get_tail, length + 5,)
 
     def test_append(self):
         chunk_list = ChunkFactory.get_successors(self.first_chunk, 8)

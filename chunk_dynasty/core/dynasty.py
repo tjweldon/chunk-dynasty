@@ -45,7 +45,11 @@ class Dynasty:
         :param length:
         :return:
         """
-        pass
+        if length > len(self._chunks):
+            msg = "Provide a length less than or equal to the total dynasty length, total dynasty length was {}, tail length requested was {}"
+            raise ValueError(msg.format(len(self._chunks), length))
+        chunk_subset = self._chunks[-length:]
+        return Dynasty(chunk_subset)
 
     def append(self, chunk: Chunk) -> Dynasty:
         """
@@ -53,7 +57,9 @@ class Dynasty:
         :param chunk:
         :return:
         """
-        pass
+        self._chunks.append(chunk)
+
+        return self
 
     def serialize(self) -> str:
         pass

@@ -1,3 +1,5 @@
+from typing import List
+
 from chunk_dynasty.core.chunk import get_salter, Chunk
 
 
@@ -11,10 +13,12 @@ class ChunkFactory:
         return chunk
 
     @classmethod
-    def get_successors(cls, chunk: Chunk, number_of_successors: int):
+    def get_successors(cls, chunk: Chunk, number_of_successors: int) -> List[Chunk]:
         dynasty = [chunk]
         for i in range(0, number_of_successors):
             dynasty.append(cls.get_successor(dynasty[i], i))
+
+        return dynasty
 
     @classmethod
     def get_successor(cls, chunk: Chunk, data: int) -> Chunk:
