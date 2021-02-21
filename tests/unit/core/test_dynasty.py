@@ -30,3 +30,25 @@ class DynastyTest(unittest.TestCase):
             dynasty.validate(),
             "Dynasty.validate() returned false for a invalid Dynasty"
         )
+
+    def test_get_tail(self):
+        chunk_list = ChunkFactory.get_successors(self.first_chunk, 8)
+        dynasty = Dynasty(chunk_list)
+
+        expected_tail_length = 2
+        tail = dynasty.get_tail(expected_tail_length)
+        expected_ultimate_successor = chunk_list[-1]
+        actual_ultimate_successor = tail.get_chunk_list()[-1]
+
+        self.assertEqual(expected_ultimate_successor, actual_ultimate_successor)
+        self.assertEqual(expected_tail_length, len(tail.get_chunk_list()))
+
+    def test_append(self):
+        chunk_list = ChunkFactory.get_successors(self.first_chunk, 8)
+        dynasty = Dynasty(chunk_list[:-1])
+
+        dynasty = dynasty.append(chunk_list[-1])
+        expected_ultimate_successor = chunk_list[-1]
+        actual_ultimate_successor = dynasty.get_chunk_list()[-1]
+
+        self.assertEqual(expected_ultimate_successor, actual_ultimate_successor)

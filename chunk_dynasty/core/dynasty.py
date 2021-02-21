@@ -35,9 +35,13 @@ class Dynasty:
             ordering_is_valid = ordering_is_valid and current_succession_verified
         return ordering_is_valid
 
+    def get_chunk_list(self):
+        return self._chunks
+
     def get_tail(self, length: int) -> Dynasty:
         """
-        Returns a Dynasty of the length provided
+        Returns the sub-dynasty whose ultimate successor is the same as this dynasty's
+        and whose length is the length provided.
         :param length:
         :return:
         """
