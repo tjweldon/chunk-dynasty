@@ -25,7 +25,8 @@ class DynastyTest(unittest.TestCase):
         chunk_list = [self.first_chunk] * 8
         dynasty = Dynasty(chunk_list)
 
-        self.assertFalse(
+        self.assertIs(
+            False,
             dynasty.validate(),
             "Dynasty.validate() returned false for a invalid Dynasty"
         )
