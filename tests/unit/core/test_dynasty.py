@@ -12,6 +12,13 @@ class DynastyTest(unittest.TestCase):
             b'rollers',
         )
 
+    def test_serialization(self):
+        dynasty = Dynasty(ChunkFactory.get_successors(self.first_chunk, 8))
+        dynasty_json = dynasty.serialize()
+        deserialized_dynasty = Dynasty.deserialize(dynasty_json)
+
+        self.assertTrue(dynasty == deserialized_dynasty)
+
     def test_valid_dynasty(self):
         chunk_list = ChunkFactory.get_successors(self.first_chunk, 8)
         dynasty = Dynasty(chunk_list)
