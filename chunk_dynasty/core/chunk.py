@@ -12,13 +12,19 @@ def get_salter(data: bytes, parent_header: bytes) -> Callable:
 
 
 class Chunk:
+
+    @classmethod
+    def deserialize(cls, json_chunk: str) -> Chunk:
+        chunk_dict = json.loads(json_chunk)
+        return cls(**chunk_dict)
+
     def __init__(
             self, data: bytes, parent_header: bytes, header: bytes, salt: bytes
     ) -> None:
-        self._data = data
-        self._parent_header = parent_header
-        self._header = header
-        self._salt = salt
+        self._data = data if type(data) == bytes else data.encode()
+        self._parent_header = parent_header if type(parent_header) == bytes else parent_header.encode()
+        self._header = header if type(header) == bytes else header.encode()
+        self._salt = salt if type(salt) == bytes else salt.encode()
 
     def __str__(self) -> str:
         return str(bytes(self))
@@ -46,20 +52,15 @@ class Chunk:
         return hash_chunk(self) == self._header
 
     def serialize(self) -> str:
-        chunk_dict = {
+        return json.dumps(self.get_dict())
+
+    def get_dict(self) -> dict:
+        return {
             'data': self._data.decode(),
             'parent_header': self._parent_header.decode(),
             'header': self._header.decode(),
             'salt': self._salt.decode(),
         }
-
-        return json.dumps(chunk_dict)
-
-    @classmethod
-    def deserialize(cls, json_chunk: str) -> Chunk:
-        chunk_dict = json.loads(json_chunk)
-        return cls(**chunk_dict)
-
 
 def hash_chunk(chunk: Chunk) -> bytes:
     chunk_hash = SHA256.new(data=bytes(chunk)).hexdigest()

@@ -2,6 +2,7 @@ import json
 import unittest
 
 from chunk_dynasty.core.chunk import get_salter, Chunk
+from tests.unit.core.fixtures.chunk_factory import ChunkFactory
 
 
 class ChunkTest(unittest.TestCase):
@@ -9,12 +10,6 @@ class ChunkTest(unittest.TestCase):
         self.data = b'skateboards'
         self.parent_header = b'birds'
         self.salt = b'rollers'
-
-    def get_valid_chunk(self) -> Chunk:
-        salter = get_salter(data=self.data, parent_header=self.parent_header)
-        new_header = salter(self.salt)
-        chunk = Chunk(self.data, self.parent_header, new_header, self.salt)
-        return chunk
 
     def get_serialized_chunk(self) -> str:
         salter = get_salter(data=self.data, parent_header=self.parent_header)
@@ -37,7 +32,7 @@ class ChunkTest(unittest.TestCase):
         return is_json
 
     def test_create_chunk(self):
-        chunk = self.get_valid_chunk()
+        chunk = ChunkFactory.get_valid_chunk(self.data, self.parent_header, self.salt)
 
         self.assertTrue(
             chunk.verify(),
@@ -54,7 +49,7 @@ class ChunkTest(unittest.TestCase):
         )
 
     def test_serialization_to_json(self):
-        chunk = self.get_valid_chunk()
+        chunk = ChunkFactory.get_valid_chunk(self.data, self.parent_header, self.salt)
         serialized_chunk = chunk.serialize()
 
         is_valid = self.validate_json(serialized_chunk)
