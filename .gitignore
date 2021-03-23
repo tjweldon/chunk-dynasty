@@ -35,3 +35,4 @@ gmon.out
 .coverage
 .mypy_cache/
 .pytest_cache/
+scratch.py
