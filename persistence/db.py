@@ -15,5 +15,5 @@ def commit():
 
 
 def close():
-    con.commit()
-    con.close()
+    _con.commit()
+    _con.close()
