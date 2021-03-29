@@ -7,6 +7,7 @@ def run():
         CREATE SCHEMA public;
         create table chunks
         (
+            sequence serial, 
             header varchar(255) not null,
             salt varchar(255) not null,
             parent_header varchar(255) not null,
@@ -18,6 +19,9 @@ def run():
         
         create unique index chunks_parent_header_uindex
             on chunks (parent_header);
+            
+        create unique index chunks_sequence_uindex
+            on chunks (sequence);
         
         alter table chunks
             add constraint chunks_pk

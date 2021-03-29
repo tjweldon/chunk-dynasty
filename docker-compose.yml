@@ -1,9 +1,9 @@
 services:
   python:
-    image: kennethreitz/pipenv
+    image: library/python:latest
     volumes:
       - ./:/app:cached
-    command: "tail -f /dev/null"
+    command: "/app/bin/build.sh"
   db:
     image: postgres
     ports:

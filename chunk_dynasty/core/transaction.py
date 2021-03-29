@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import time
+from typing import Optional
+
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Hash import SHA256
 from Cryptodome.Signature import pss
@@ -37,7 +39,7 @@ def _verify(pk: bytes, message: bytes, signature: bytes) -> None:
 
 
 class Transaction:
-    def __init__(self, amount: float, sender: bytes, recipient: bytes):
+    def __init__(self, amount: float, sender: Optional[bytes], recipient: bytes):
         self._timestamp = time.time()
         self._amount = amount
         self._recipient = recipient
@@ -47,7 +49,7 @@ class Transaction:
         dict_transaction = {
             'timestamp': self._timestamp,
             'amount': self._amount,
-            'sender': self._sender.decode(),
+            'sender': self._sender.decode() if self._sender else None,
             'recipient': self._recipient.decode()
         }
 
