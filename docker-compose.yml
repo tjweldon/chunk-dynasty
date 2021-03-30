@@ -1,9 +1,9 @@
 services:
   python:
-    image: library/python:latest
+    build:
+      context: docker/python
     volumes:
       - ./:/app:cached
-    command: "/app/bin/build.sh"
   db:
     image: postgres
     ports:

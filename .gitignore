@@ -35,4 +35,4 @@ gmon.out
 .coverage
 .mypy_cache/
 .pytest_cache/
-scratch.py
+start_miner.py
